@@ -9,8 +9,8 @@
 
 int main(int argc, char const *argv[])
 {   
-    int rows = 5000;
-    int cols = 5000;
+    int rows = 15360;
+    int cols = 8640;
 
     std::random_device rd;  
     std::mt19937 gen(rd());
@@ -33,9 +33,13 @@ int main(int argc, char const *argv[])
     t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> cuda_t = t2 - t1;
 
-    std::cout<< seq_t.count() << "\n";
-    std::cout<< cuda_t.count() << "\n";
-    std::cout<< seq_t.count() / cuda_t.count();
+    std::cout<< seq_t.count() << "  GL\n";
+    std::cout<< cuda_t.count() << " GL\n";
+    std::cout<< seq_t.count() / cuda_t.count() << "\n";
+
+    std::cout<< res_seq.time.count() << "  KER\n";
+    std::cout<< res_cuda.time.count() << "  KER\n";
+    std::cout<< res_seq.time.count() / res_cuda.time.count();
 
     return 0;
 }

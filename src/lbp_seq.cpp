@@ -1,5 +1,7 @@
 #include "../include/lbp_seq.h"
 
+#include <iostream>
+
 int _lbp_seq(int* image, int r, int c, int cols){
     int lbp_value = 0;
     int pos = (r+1)*(cols+2) + (c+1);
@@ -17,22 +19,7 @@ int _lbp_seq(int* image, int r, int c, int cols){
     return lbp_value;
 }
 
-unsigned int* _histogram_seq(int* lbp_image, int rows, int cols){
-    unsigned int* histogram = new unsigned int[256];
-    for(int i=0; i<256; i++){
-        histogram[i] = 0;
-    }
-
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
-            histogram[lbp_image[(i*cols) + j]] += 1;
-        }
-    }
-
-    return histogram; 
-}
-
-unsigned int* get_LBP_hist_seq(int* image, int rows, int cols){
+results get_LBP_hist_seq(int* image, int rows, int cols){
     int* padded_img = new int[(rows+2)*(cols+2)];
 
     for(int i=0; i<rows+2; i++){
@@ -44,15 +31,22 @@ unsigned int* get_LBP_hist_seq(int* image, int rows, int cols){
         }
     }
 
-    int* result = new int[rows*cols];
-
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
-            result[(i*cols) + j] = _lbp_seq(padded_img, i, j, cols);
-        }
+    unsigned int* histogram = new unsigned int[256];
+    for(int i=0; i<256; i++){
+        histogram[i] = 0;
     }
 
-    auto histogram = _histogram_seq(result, rows, cols);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    for(int i=0; i<rows; i++){
+        for(int j=0; j<cols; j++){
+            histogram[_lbp_seq(padded_img, i, j, cols)] += 1;
+        }
+    }
+    auto t2 = std::chrono::high_resolution_clock::now();
     
-    return histogram;
+    results res;
+    res.histogram = histogram;
+    res.time = t2 - t1;
+
+    return res;
 }
