@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 
+__global__ void _lbp_kernel_t(int* image, int* result, int rows, int cols);
 __global__ void _lbp_kernel(int* image, int* result, int rows, int cols);
 __global__ void _histogram_kernel(int* lbp_image, int* histogram, int rows, int cols);
 unsigned int* _histogram_cuda(int* lbp_image, int cols, int rows);

@@ -19,6 +19,9 @@ int _lbp_seq(int* image, int r, int c, int cols){
 
 unsigned int* _histogram_seq(int* lbp_image, int rows, int cols){
     unsigned int* histogram = new unsigned int[256];
+    for(int i=0; i<256; i++){
+        histogram[i] = 0;
+    }
 
     for(int i=0; i<rows; i++){
         for(int j=0; j<cols; j++){

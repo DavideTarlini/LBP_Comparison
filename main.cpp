@@ -9,8 +9,8 @@
 
 int main(int argc, char const *argv[])
 {   
-    int rows = 16000;
-    int cols = 16000;
+    int rows = 5000;
+    int cols = 5000;
 
     std::random_device rd;  
     std::mt19937 gen(rd());
