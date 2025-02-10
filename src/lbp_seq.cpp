@@ -25,9 +25,9 @@ results get_LBP_hist_seq(int* image, int rows, int cols){
     for(int i=0; i<rows+2; i++){
         for(int j=0; j<cols+2; j++){
             if(i == 0 || i == rows+1 || j == 0 || j == cols+1) 
-                padded_img[(i*cols) + j] = 0;
+                padded_img[(i*(cols+2)) + j] = 0;
             else
-                padded_img[((i)*cols) + (j)] = image[((i-1)*cols) + (j-1)];
+                padded_img[((i)*(cols+2)) + (j)] = image[((i-1)*cols) + (j-1)];
         }
     }
 
@@ -47,6 +47,7 @@ results get_LBP_hist_seq(int* image, int rows, int cols){
     results res;
     res.histogram = histogram;
     res.time = t2 - t1;
+    delete[] padded_img;
 
     return res;
 }
