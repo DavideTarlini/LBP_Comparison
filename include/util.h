@@ -6,6 +6,7 @@
 struct results {
     unsigned int* histogram;
     std::chrono::duration<double, std::milli> time;
+    int grid_size;
 };
 
 #endif

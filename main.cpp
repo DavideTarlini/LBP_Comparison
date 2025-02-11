@@ -69,7 +69,7 @@ int main(int argc, char const *argv[])
     
     std::vector<double> global_exp_res;
     std::vector<double> ker_exp_res;
-
+    
     experiment(0, linear_img, rows, cols, global_exp_res, ker_exp_res, true);
 
     delete[] linear_img;
