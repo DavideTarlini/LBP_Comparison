@@ -1,7 +1,6 @@
 #include "../include/lbp_cuda.cuh"
 #include <iostream>
 
-
 __global__ void _padd_kernel(int* image, int* padd_img, int rows, int cols){
     const int r = blockIdx.y*blockDim.y + threadIdx.y;
     const int c = blockIdx.x*blockDim.x + threadIdx.x;
@@ -116,11 +115,6 @@ results get_LBP_hist_cuda(int* image, int rows, int cols){
     int* d_img;
     int* d_padd_img;
     unsigned int* d_hist; 
-    int s_y = 32;
-    int s_x = 32;
-
-    dim3 dimBlock_lbp(s_x, s_y, 1);
-    dim3 dimGrid_lbp(ceil(float(cols)/s_x), ceil(float(rows)/s_y), 1);
 
     cudaMalloc((void **) &d_img, rows*cols*sizeof(int));
     cudaMemcpy(d_img, image, rows*cols*sizeof(int), cudaMemcpyHostToDevice);
@@ -129,7 +123,13 @@ results get_LBP_hist_cuda(int* image, int rows, int cols){
     cudaMalloc((void **) &d_hist, 256*sizeof(unsigned int));
     cudaMemset(d_hist, 0, 256*sizeof(unsigned int));
     
-    _padd_kernel<<<dimGrid_lbp, dimBlock_lbp>>>(d_img, d_padd_img, rows, cols);
+
+    int p_y = 32;
+    int p_x = 32;
+    dim3 dimBlock_p(p_x, p_y, 1);
+    dim3 dimGrid_p(ceil(float(cols)/p_x), ceil(float(rows)/p_y), 1);
+
+    _padd_kernel<<<dimGrid_p, dimBlock_p>>>(d_img, d_padd_img, rows, cols);
     auto err1 = cudaDeviceSynchronize();
 
     if (err1 != cudaSuccess) {
@@ -140,6 +140,11 @@ results get_LBP_hist_cuda(int* image, int rows, int cols){
 
         exit(EXIT_FAILURE);
     }
+
+    int lbp_y = 32;
+    int lbp_x = 32;
+    dim3 dimBlock_lbp(lbp_x, lbp_y, 1);
+    dim3 dimGrid_lbp(ceil(float(cols)/lbp_x), ceil(float(rows)/lbp_y), 1);
 
     auto t1 = std::chrono::high_resolution_clock::now();
     _lbp_h_kernel<<<dimGrid_lbp, dimBlock_lbp>>>(d_padd_img, d_hist, rows, cols);
@@ -164,7 +169,7 @@ results get_LBP_hist_cuda(int* image, int rows, int cols){
     results res;
     res.histogram = histogram;
     res.time = t2 - t1;
-    res.grid_size = ceil(float(cols)/s_x)*ceil(float(rows)/s_y)*s_x*s_y;
+    res.grid_size = ceil(float(cols)/lbp_x)*ceil(float(rows)/lbp_y)*lbp_x*lbp_y;
 
     return res;
 }

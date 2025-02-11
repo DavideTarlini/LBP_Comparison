@@ -54,7 +54,7 @@ void experiment(int i, int* img, int rows, int cols, std::vector<double> global_
 int main(int argc, char const *argv[])
 {   
     int rows = 15000;
-    int cols = 10000;
+    int cols = 15000;
 
     std::random_device rd;  
     std::mt19937 gen(rd());
