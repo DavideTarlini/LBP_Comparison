@@ -5,7 +5,8 @@
 
 struct results {
     unsigned int* histogram;
-    std::chrono::duration<double, std::milli> time;
+    std::chrono::duration<double, std::milli> time_pad;
+    std::chrono::duration<double, std::milli> time_lbp;
     int grid_size;
 };
 
