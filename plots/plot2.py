@@ -22,7 +22,7 @@ for block_size in block_sizes:
 
 plt.xlabel("Image Size", fontsize=20)
 plt.ylabel("Global Speedup", fontsize=20)
-plt.xticks(fontsize=18)  # for x-axis tick labels
+plt.xticks(fontsize=18)  
 plt.yticks(fontsize=18)
 plt.xscale("log", base=2)
 plt.grid(True)
